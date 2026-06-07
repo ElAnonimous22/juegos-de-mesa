@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mega Consola de Juegos de Mesa</title>
+    <title>Mega Consola Máxima de Juegos</title>
     <style>
         :root {
             --primary: #ff9f43;
@@ -14,6 +14,7 @@
             --p1-color: #ff7675;
             --p2-color: #54a0ff;
             --btn-apps: #9b59b6;
+            --card-back: #341f97;
         }
 
         body {
@@ -29,7 +30,7 @@
 
         *, *::before, *::after { box-sizing: border-box; }
 
-        /* --- BOTONES DE NAVEGACIÓN SUPERIOR --- */
+        /* --- NAVEGACIÓN --- */
         .contenedor-nav {
             position: absolute;
             top: 20px;
@@ -58,17 +59,9 @@
             transform: translateY(-2px);
         }
 
-        /* Botón especial para tus otras apps */
-        .btn-apps-externas {
-            border-color: var(--btn-apps);
-            color: var(--btn-apps);
-        }
-        .btn-apps-externas:hover {
-            background: var(--btn-apps);
-            color: white;
-        }
+        .btn-apps-externas { border-color: var(--btn-apps); color: var(--btn-apps); }
+        .btn-apps-externas:hover { background: var(--btn-apps); color: white; }
 
-        /* --- SELECTOR DE IDIOMA --- */
         .selector-idioma {
             position: absolute;
             top: 20px;
@@ -84,7 +77,7 @@
             border: none; font-size: 16px; font-weight: bold; outline: none; cursor: pointer; color: var(--accent-board);
         }
 
-        /* --- CONTENEDOR PRINCIPAL --- */
+        /* --- ESTRUCTURA DE LA HUB --- */
         .hub-container {
             max-width: 1200px;
             margin: 80px auto 0 auto;
@@ -96,6 +89,7 @@
             color: white;
             margin-bottom: 30px;
             text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+            animation: bounceIn 0.8s ease;
         }
 
         .grid-juegos {
@@ -113,10 +107,12 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        .seccion-bloque:hover { transform: translateY(-5px); }
 
         .seccion-bloque h2 {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             color: var(--text-dark);
             margin-top: 0;
             margin-bottom: 15px;
@@ -125,8 +121,8 @@
         }
 
         .turno-txt { font-weight: bold; margin-bottom: 15px; font-size: 1.1rem; min-height: 24px; }
+        .win-glow { animation: pulseGlow 0.8s infinite alternate; color: #10ac84; font-size: 1.2rem; }
 
-        /* --- BOTONES Y ACCIONES --- */
         .btn-accion {
             background: linear-gradient(45deg, var(--primary), #ff7675);
             color: white; border: none; padding: 10px 20px; font-size: 0.95rem;
@@ -134,55 +130,93 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.15); transition: transform 0.1s;
             margin: 5px;
         }
-        .btn-accion:hover { transform: scale(1.03); }
+        .btn-accion:hover { transform: scale(1.05); }
         select.select-modo { padding: 5px 10px; border-radius: 10px; font-weight: bold; margin-bottom: 10px; }
 
-        /* --- JUEGO 1: TRES EN RAYA --- */
-        .tablero-gato {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 200px; margin: 0 auto 15px auto;
-        }
+        /* --- 1. GATO --- */
+        .tablero-gato { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 200px; margin: 0 auto 15px auto; }
         .celda-gato {
             background: #f1f2f6; aspect-ratio: 1; border-radius: 12px; font-size: 1.8rem;
             font-weight: bold; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; border: 2px solid #ced6e0;
+            cursor: pointer; border: 2px solid #ced6e0; transition: background 0.2s;
         }
+        .celda-gato:hover { background: #e4e7eb; }
 
-        /* --- JUEGO 2: CONECTA 4 --- */
+        /* --- 2. CONECTA 4 --- */
         .tablero-c4 {
             display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px;
             background: #2e86de; padding: 10px; border-radius: 15px; max-width: 320px; margin: 0 auto 15px auto;
         }
-        .ficha-c4 {
-            background: white; aspect-ratio: 1; border-radius: 50%; cursor: pointer; box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
-        }
+        .ficha-c4 { background: white; aspect-ratio: 1; border-radius: 50%; cursor: pointer; box-shadow: inset 0 2px 5px rgba(0,0,0,0.2); transition: background 0.2s; }
 
-        /* --- JUEGO 3: JUEGO DEL NIM --- */
+        /* --- 3. NIM --- */
         .contenedor-nim { display: flex; justify-content: center; gap: 15px; margin: 20px 0; min-height: 80px; align-items: flex-end;}
-        .cerilla { width: 12px; height: 70px; background: #ff9f43; border-radius: 4px; position: relative; cursor: pointer; transition: opacity 0.2s;}
+        .cerilla { width: 12px; height: 70px; background: #ff9f43; border-radius: 4px; position: relative; transition: all 0.3s; }
         .cerilla::before { content: ''; position: absolute; top: -10px; left: -2px; width: 16px; height: 14px; background: #ee5253; border-radius: 50%; }
-        .cerilla.eliminada { opacity: 0; pointer-events: none; }
+        .cerilla.eliminada { transform: translateY(-20px); opacity: 0; pointer-events: none; }
 
-        /* --- JUEGO 4: CARRERA DE DADOS --- */
+        /* --- 4. CARRERA DADOS --- */
         .marcador-carrera { display: flex; justify-content: space-around; font-weight: bold; font-size: 1.2rem; margin-bottom: 15px; }
 
-        /* --- JUEGO 5: UTILERÍA DE AZAR --- */
+        /* --- 5. MEMORY --- */
+        .tablero-memory { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-width: 260px; margin: 0 auto 15px auto; }
+        .carta-memory {
+            aspect-ratio: 1; background: var(--card-back); border-radius: 10px; cursor: pointer;
+            position: relative; transform-style: preserve-3d; transition: transform 0.3s;
+            display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: transparent;
+        }
+        .carta-memory.volteada { transform: rotateY(180deg); background: #f1f2f6; color: initial; border: 2px solid var(--card-back); }
+        .carta-memory.volteada span { transform: rotateY(180deg); display: inline-block; }
+        .carta-memory.emparejada { background: #10ac84; color: white; cursor: default; pointer-events: none; transform: rotateY(180deg); }
+        .carta-memory.emparejada span { transform: rotateY(180deg); display: inline-block; }
+
+        /* --- 6. PPTLS --- */
+        .opciones-ppt { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
+        .btn-ppt { font-size: 1.5rem; padding: 10px; border-radius: 12px; background: #f5f6fa; border: 2px solid #ced6e0; cursor: pointer; transition: transform 0.1s; }
+        .btn-ppt:hover { transform: scale(1.1); }
+
+        /* --- 7. SNAKE (NUEVO) --- */
+        .contenedor-canvas-snake { position: relative; background: #000; width: 280px; height: 200px; margin: 0 auto 10px auto; border-radius: 10px; overflow: hidden; border: 3px solid #333; }
+        canvas { display: block; background: #111; }
+        .controles-snake { display: grid; grid-template-columns: repeat(3, 1fr); width: 120px; margin: 0 auto; gap: 5px; }
+        .btn-dir { background: #ced6e0; border: none; padding: 8px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+
+        /* --- 8. AHORCADO (NUEVO) --- */
+        .palabra-ahorcado { font-size: 1.8rem; letter-spacing: 6px; font-weight: bold; margin: 15px 0; min-height: 40px; color: #2f3542; }
+        .teclado-ahorcado { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; max-width: 380px; margin: 0 auto; }
+        .letra-btn { background: #f1f2f6; border: 1px solid #ced6e0; border-radius: 6px; padding: 6px 10px; font-weight: bold; cursor: pointer; }
+        .letra-btn:disabled { opacity: 0.4; cursor: default; }
+
+        /* --- 9. COOKIE CLICKER (NUEVO) --- */
+        .cookie-img { font-size: 4.5rem; cursor: pointer; display: inline-block; transition: transform 0.1s; margin: 10px 0; }
+        .cookie-img:active { transform: scale(0.85); }
+
+        /* --- 10. SIMON SAYS (NUEVO) --- */
+        .panel-simon { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 200px; margin: 0 auto 15px auto; }
+        .pad-simon { aspect-ratio: 1; border-radius: 15px; opacity: 0.6; cursor: pointer; transition: opacity 0.1s; border: 3px solid #222f3e; }
+        .pad-simon:active, .pad-simon.lit { opacity: 1; filter: brightness(1.3); }
+        .s-verde { background: #2ecc71; } .s-rojo { background: #e74c3c; }
+        .s-amarillo { background: #f1c40f; } .s-azul { background: #3498db; }
+
+        /* --- AZAR --- */
         .flex-herramientas { display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 15px; }
         .display-resultado {
-            font-size: 3rem; margin-bottom: 10px; min-height: 70px; display: flex;
+            font-size: 2.5rem; margin-bottom: 10px; min-height: 65px; display: flex;
             align-items: center; justify-content: center; background: #f5f6fa; border-radius: 15px; border: 2px dashed #b2bec3; padding: 5px 15px;
         }
 
-        @media (max-width: 950px) { 
-            .grid-juegos { grid-template-columns: 1fr; } 
-            .selector-idioma { position: static; display: inline-block; margin-top: 10px; }
-            .contenedor-nav { position: static; display: flex; justify-content: center; margin-bottom: 15px; }
+        /* --- KEYFRAMES --- */
+        @keyframes bounceIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            70% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
         }
-        @media (max-width: 480px) { 
-            body { padding: 10px; } 
-            .contenedor-nav { flex-direction: column; align-items: center; width: 100%; }
-            .btn-nav { width: 90%; text-align: center; }
-            .hub-container { margin-top: 10px; } 
+        @keyframes pulseGlow {
+            0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(16,172,132,0.4)); }
+            100% { transform: scale(1.04); filter: drop-shadow(0 0 10px rgba(16,172,132,0.8)); }
         }
+
+        @media (max-width: 950px) { .grid-juegos { grid-template-columns: 1fr; } .selector-idioma, .contenedor-nav { position: static; display: flex; justify-content: center; margin: 10px auto; } }
     </style>
 </head>
 <body>
@@ -215,15 +249,7 @@
                     <div class="turno-txt" id="txt-gato">Turno: X</div>
                 </div>
                 <div class="tablero-gato">
-                    <div class="celda-gato" onclick="clickGato(0)"></div>
-                    <div class="celda-gato" onclick="clickGato(1)"></div>
-                    <div class="celda-gato" onclick="clickGato(2)"></div>
-                    <div class="celda-gato" onclick="clickGato(3)"></div>
-                    <div class="celda-gato" onclick="clickGato(4)"></div>
-                    <div class="celda-gato" onclick="clickGato(5)"></div>
-                    <div class="celda-gato" onclick="clickGato(6)"></div>
-                    <div class="celda-gato" onclick="clickGato(7)"></div>
-                    <div class="celda-gato" onclick="clickGato(8)"></div>
+                    <script>for(let i=0;i<9;i++) document.write(`<div class="celda-gato" onclick="clickGato(${i})"></div>`);</script>
                 </div>
                 <button class="btn-accion" id="reset-gato" onclick="reiniciarGato()">Reiniciar 🔄</button>
             </div>
@@ -258,8 +284,71 @@
                 <button class="btn-accion" id="btn-carrera" onclick="jugarCarrera()">Lanzar Mi Dado ⚡</button>
             </div>
 
+            <div class="seccion-bloque">
+                <h2 id="t-memory">🧠 Parejas de Memoria</h2>
+                <div class="turno-txt" id="txt-memory">¡Encuentra todas las parejas ocultas!</div>
+                <div class="tablero-memory" id="board-memory"></div>
+                <button class="btn-accion" id="reset-memory" onclick="reiniciarMemory()">Reiniciar Juego 🔄</button>
+            </div>
+
+            <div class="seccion-bloque">
+                <h2 id="t-ppt">✂️ Piedra, Papel, Tijera, Lagarto, Spock</h2>
+                <div class="turno-txt" id="txt-ppt">Elige tu arma secreta contra el sistema.</div>
+                <div class="opciones-ppt">
+                    <button class="btn-ppt" onclick="jugarPPT('💎')">💎</button>
+                    <button class="btn-ppt" onclick="jugarPPT('📄')">📄</button>
+                    <button class="btn-ppt" onclick="jugarPPT('✂️')">✂️</button>
+                    <button class="btn-ppt" onclick="jugarPPT('🦎')">🦎</button>
+                    <button class="btn-ppt" onclick="jugarPPT('🖖')">🖖</button>
+                </div>
+                <div class="marcador-carrera" style="font-size:1rem;">
+                    <div id="ppt-p1">Tú: -</div>
+                    <div id="ppt-p2">IA: -</div>
+                </div>
+            </div>
+
+            <div class="seccion-bloque">
+                <h2 id="t-snake">🐍 Arcade Snake Clásico</h2>
+                <div class="turno-txt" id="txt-snake">Puntos: 0</div>
+                <div class="contenedor-canvas-snake">
+                    <canvas id="canvas-snake" width="280" height="200"></canvas>
+                </div>
+                <div class="controles-snake">
+                    <div></div><button class="btn-dir" onclick="cambiarDirSnake('UP')">▲</button><div></div>
+                    <button class="btn-dir" onclick="cambiarDirSnake('LEFT')">◀</button><button class="btn-dir" onclick="initSnake()">🔄</button><button class="btn-dir" onclick="cambiarDirSnake('RIGHT')">▶</button>
+                    <div></div><button class="btn-dir" onclick="cambiarDirSnake('DOWN')">▼</button><div></div>
+                </div>
+            </div>
+
+            <div class="seccion-bloque">
+                <h2 id="t-hangman">🪵 Juego del Ahorcado</h2>
+                <div class="turno-txt" id="txt-hangman">Vidas restantes: 6</div>
+                <div class="palabra-ahorcado" id="palabra-ahorcado">_ _ _ _</div>
+                <div class="teclado-ahorcado" id="teclado-ahorcado"></div>
+                <button class="btn-accion" onclick="initAhorcado()" style="margin-top:10px;">Nueva Palabra 🔄</button>
+            </div>
+
+            <div class="seccion-bloque">
+                <h2 id="t-cookie">🍪 Clicker Incremental</h2>
+                <div class="turno-txt" id="txt-cookie">Galletas: 0 (Multiplicador: x1)</div>
+                <div class="cookie-img" onclick="clickGalleta()">🍪</div>
+                <button class="btn-accion" id="btn-up-cookie" onclick="comprarUpgradeCookie()">Mejorar Rodillo (Coste: 15) 🛠️</button>
+            </div>
+
+            <div class="seccion-bloque">
+                <h2 id="t-simon">💡 Simón Dice Retro</h2>
+                <div class="turno-txt" id="txt-simon">¡Pulsa Iniciar para memorizar!</div>
+                <div class="panel-simon">
+                    <div class="pad-simon s-verde" id="simon-0" onclick="clickSimon(0)"></div>
+                    <div class="pad-simon s-rojo" id="simon-1" onclick="clickSimon(1)"></div>
+                    <div class="pad-simon s-amarillo" id="simon-2" onclick="clickSimon(2)"></div>
+                    <div class="pad-simon s-azul" id="simon-3" onclick="clickSimon(3)"></div>
+                </div>
+                <button class="btn-accion" onclick="initSimon()">Iniciar Desafío ⚡</button>
+            </div>
+
             <div class="seccion-bloque" style="grid-column: 1 / -1;">
-                <h2 id="t-tools">🎛️ Generador de Azar Avanzado (Dados de Rol)</h2>
+                <h2 id="t-tools">🎛️ Generador de Azar Avanzado</h2>
                 <div class="flex-herramientas">
                     <div>
                         <div class="display-resultado" id="res-d6">⚀</div>
@@ -272,7 +361,6 @@
                     </div>
                     <div>
                         <div class="display-resultado" id="res-moneda">🪙</div>
-                        <div style="height:34px;"></div>
                         <button class="btn-accion" id="b-moneda" onclick="lanzarMoneda()">Lanzar Moneda</button>
                     </div>
                 </div>
@@ -282,156 +370,147 @@
     </div>
 
     <script>
-        // --- MOTOR DE LOCALIZACIÓN TRILINGÜE ---
+        // --- MOTOR DE TRADUCCIÓN ---
         let langActual = 'es';
         const locales = {
             es: {
                 volver: "⬅ Menú Principal", apps: "🚀 Más Aplicaciones", title: "🎲 Mega Consola de Juegos de Mesa 🎯",
                 tgato: "⭕ Tres en Raya (Gato)", tc4: "🔵 Conecta 4 en Línea", tnim: "🥢 Estrategia Matemática: NIM",
-                tcarrera: "🏃 Carrera de Dados (Meta: 50)", ttools: "🎛️ Generador de Azar Avanzado (Dados de Rol)",
+                tcarrera: "🏃 Carrera de Dados (Meta: 50)", ttools: "🎛️ Generador de Azar Avanzado",
+                tmemory: "🧠 Parejas de Memoria", tppt: "✂️ Piedra, Papel, Tijera, Lagarto, Spock",
+                tsnake: "🐍 Arcade Snake Clásico", thangman: "🪵 Juego del Ahorcado", tcookie: "🍪 Clicker Incremental", tsimon: "💡 Simón Dice Retro",
                 pvp: "Dos Jugadores (PvP)", ai: "Contra IA del Sistema", tX: "Turno: Jugador X", tO: "Turno: Jugador O",
                 gX: "🎉 ¡Jugador X gana!", gO: "🎉 ¡Jugador O gana!", empate: "🤝 ¡Empate!",
                 tRojo: "Turno: Rojo 🔴", tAzul: "Turno: Azul 🔵", gRojo: "🎉 ¡Gana el color Rojo!", gAzul: "🎉 ¡Gana el color Azul!",
-                nimTxt: "Retira 1, 2 o 3 piezas. ¡No te quedes con la última!", nimGanaP1: "🎉 ¡Jugador 1 gana el duelo!", nimGanaP2: "💻 ¡La IA gana! Más suerte la próxima vez.",
-                carTxt: "¡Lanza para acumular puntos!", carGanaP1: "🎉 ¡Felicidades, ganaste la carrera!", carGanaP2: "💻 La IA llegó primero a la meta.",
+                nimTxt: "Retira 1, 2 o 3 piezas. ¡No te quedes con la última!", nimGanaP1: "🎉 ¡Jugador 1 gana el duelo!", nimGanaP2: "💻 ¡La IA gana!",
+                carTxt: "¡Lanza para acumular puntos!", carGanaP1: "🎉 ¡Felicidades, ganaste!", carGanaP2: "💻 La IA llegó primero.",
+                memTxt: "¡Encuentra todas las parejas ocultas!", memWin: "🎉 ¡Memoria completada!",
+                pptTxt: "Elige tu arma secreta contra el sistema.", pptWin: "🎉 ¡Ganaste la ronda!", pptLose: "💻 ¡La IA gana la ronda!",
+                snkScore: "Puntos: ", snkOver: "💥 Fin del juego. ¡Inténtalo de nuevo!",
+                hangVidas: "Vidas restantes: ", hangWin: "🎉 ¡Ganaste! Revelaste la palabra.", hangLose: "💥 Perdiste. La palabra era: ",
+                cookTxt: "Galletas: ", cookUpgrade: "Mejorar Rodillo (Coste: ", simGo: "¡Tu turno! Repite el orden.", simErr: "💥 ¡Secuencia incorrecta! Reinicia.", simPls: "¡Pulsa Iniciar para memorizar!",
                 dado: "Lanzar Dado", moneda: "Lanzar Moneda", cara: "🪙 Cara", cruz: "🍁 Cruz", reset: "Reiniciar 🔄",
                 d6: "Dado Común (D6)", d12: "Dado de 12 Caras (D12)", d20: "Dado de Rol (D20)"
             },
             en: {
                 volver: "⬅ Main Menu", apps: "🚀 More Apps", title: "🎲 Mega Board Games Console 🎯",
                 tgato: "⭕ Tic-Tac-Toe Arena", tc4: "🔵 Connect 4 Slots", tnim: "🥢 Mathematical Strategy: NIM",
-                tcarrera: "🏃 Dice Race (Goal: 50)", ttools: "🎛️ Advanced RNG Toolset (RPG Dice)",
+                tcarrera: "🏃 Dice Race (Goal: 50)", ttools: "🎛️ Advanced RNG Toolset",
+                tmemory: "🧠 Pairs Memory Game", tppt: "✂️ Rock, Paper, Scissors, Lizard, Spock",
+                tsnake: "🐍 Classic Arcade Snake", thangman: "🪵 Hangman Game", tcookie: "🍪 Incremental Clicker", tsimon: "💡 Retro Simon Says",
                 pvp: "Two Players (PvP)", ai: "Against System AI", tX: "Turn: Player X", tO: "Turn: Player O",
                 gX: "🎉 Player X wins!", gO: "🎉 Player O wins!", empate: "🤝 Draw!",
                 tRojo: "Turn: Red 🔴", tAzul: "Turn: Blue 🔵", gRojo: "🎉 Red team wins!", gAzul: "🎉 Blue team wins!",
-                nimTxt: "Take 1, 2, or 3 pieces. Do not take the last matchstick!", nimGanaP1: "🎉 Player 1 wins the match!", nimGanaP2: "💻 AI wins! Better luck next time.",
-                carTxt: "Roll to stack up score points!", carGanaP1: "🎉 Victory! You won the race!", carGanaP2: "💻 System AI reached the finish line first.",
+                nimTxt: "Take 1, 2, or 3 pieces. Do not take the last matchstick!", nimGanaP1: "🎉 Player 1 wins!", nimGanaP2: "💻 AI wins!",
+                carTxt: "Roll to stack up score points!", carGanaP1: "🎉 Victory! You won!", carGanaP2: "💻 AI reached first.",
+                memTxt: "Find all the hidden matching pairs!", memWin: "🎉 Board cleared!",
+                pptTxt: "Choose your secret weapon.", pptWin: "🎉 You win!", pptLose: "💻 AI wins!",
+                snkScore: "Score: ", snkOver: "💥 Game over! Try again.",
+                hangVidas: "Lives left: ", hangWin: "🎉 You won! Word guessed.", hangLose: "💥 Game Over. Word was: ",
+                cookTxt: "Cookies: ", cookUpgrade: "Upgrade Roller (Cost: ", simGo: "Your turn! Match sequence.", simErr: "💥 Wrong sequence! Restart.", simPls: "Press Start to watch!",
                 dado: "Roll Dice", moneda: "Flip Coin", cara: "🪙 Heads", cruz: "🍁 Tails", reset: "Reset 🔄",
-                d6: "Standard Dice (D6)", d12: "12-Sided Dice (D12)", d20: "RPG Dice (D20)"
+                d6: "Standard Dice (D6)", d12: "12-Sided (D12)", d20: "RPG Dice (D20)"
             },
             fr: {
                 volver: "⬅ Menu Principal", apps: "🚀 Plus d'Apps", title: "🎲 Méga Console de Jeux de Société 🎯",
                 tgato: "⭕ Jeu du Morpion", tc4: "🔵 Puissance 4 en Ligne", tnim: "🥢 Stratégie Mathématique : NIM",
-                tcarrera: "🏃 Course aux Dés (Objectif : 50)", ttools: "🎛️ Générateur de Hasard (Dés JDR)",
-                pvp: "Deux Joueurs (PvP)", ai: "Contre l'IA du Système", tX: "Tour : Joueur X", tO: "Tour : Joueur O",
-                gX: "🎉 Le Joueur X gagne !", gO: "🎉 Le Joueur O gagne !", empate: "🤝 Match nul !",
-                tRojo: "Tour : Rouge 🔴", tAzul: "Tour : Bleu 🔵", gRojo: "🎉 Les Rouges gagnent !", gAzul: "🎉 Les Bleus gagnent !",
-                nimTxt: "Retirez 1, 2 ou 3 bâtonnets. Ne prenez pas le dernier !", nimGanaP1: "🎉 Le Joueur 1 a gagné !", nimGanaP2: "💻 L'IA a gagné ! Plus de chance la prochaine fois.",
-                carTxt: "Lancez le dé pour accumuler des points !", carGanaP1: "🎉 Victoire ! Vous avez gagné la course !", carGanaP2: "💻 L'IA a franchi la ligne d'arrivée en premier.",
-                dado: "Lancer le Dé", moneda: "Lancer la Pièce", cara: "🪙 Face", cruz: "🍁 Pile", reset: "Réinitialiser 🔄",
-                d6: "Dé Standard (D6)", d12: "Dé à 12 Faces (D12)", d20: "Dé de Rôle (D20)"
+                tcarrera: "🏃 Course aux Dés (50)", ttools: "🎛️ Générateur de Hasard",
+                tmemory: "🧠 Cartes Mémoire", tppt: "✂️ Pierre, Feuille, Ciseaux, Lézard, Spock",
+                tsnake: "🐍 Serpent Arcade Classique", thangman: "🪵 Jeu du Pendu", tcookie: "🍪 Clicker Incrémental", tsimon: "💡 Simon Says Rétro",
+                pvp: "Deux Joueurs", ai: "Contre l'IA", tX: "Tour : Joueur X", tO: "Tour : Joueur O",
+                gX: "🎉 Joueur X gagne !", gO: "🎉 Joueur O gagne !", empate: "🤝 Match nul !",
+                tRojo: "Tour : Rouge 🔴", tAzul: "Tour : Bleu 🔵", gRojo: "🎉 Rouges gagnent !", gAzul: "🎉 Bleus gagnent !",
+                nimTxt: "Retirez 1, 2 ou 3 bâtonnets.", nimGanaP1: "🎉 Joueur 1 gagne !", nimGanaP2: "💻 L'IA a gagné !",
+                carTxt: "Lancez le dé !", carGanaP1: "🎉 Victoire !", carGanaP2: "💻 L'IA a gagné.",
+                memTxt: "Trouvez las paires !", memWin: "🎉 Félicitations !",
+                pptTxt: "Choisissez votre arme.", pptWin: "🎉 Gagné !", pptLose: "💻 IA a gagné !",
+                snkScore: "Score : ", snkOver: "💥 Fin du jeu !",
+                hangVidas: "Vies: ", hangWin: "🎉 Gagné ! Le mot était bon.", hangLose: "💥 Pendu. Le mot était: ",
+                cookTxt: "Biscuits: ", cookUpgrade: "Améliorer (Coût: ", simGo: "À toi ! Répète.", simErr: "💥 Erreur ! Recommence.", simPls: "Cliquez sur Démarrer !",
+                dado: "Lancer Dé", moneda: "Lancer Pièce", cara: "🪙 Face", cruz: "🍁 Pile", reset: "Réinitialiser 🔄",
+                d6: "Dé Standard (D6)", d12: "Dé 12 Faces (D12)", d20: "Dé de Rôle (D20)"
             }
         };
 
         function cambiarIdioma() {
             langActual = document.getElementById('select-lang').value;
             const res = locales[langActual];
-
-            document.getElementById('lbl-volver').innerText = res.volver;
-            document.getElementById('lbl-apps').innerText = res.apps;
+            for (let k in res) {
+                let el = document.getElementById('t-' + k.slice(1)) || document.getElementById(k) || document.getElementById('lbl-' + k.slice(4));
+                if(el && !k.startsWith('g') && !k.startsWith('tX') && !k.startsWith('tO')) {
+                    if(el.tagName === "OPTION") el.innerText = res[k];
+                    else if(!el.classList.contains('btn-accion') || el.id.startsWith('lbl-')) el.innerText = res[k];
+                }
+            }
             document.getElementById('main-title').innerText = res.title;
-            document.getElementById('t-gato').innerText = res.tgato;
-            document.getElementById('t-c4').innerText = res.tc4;
-            document.getElementById('t-nim').innerText = res.tnim;
-            document.getElementById('t-carrera').innerText = res.tcarrera;
-            document.getElementById('t-tools').innerText = res.ttools;
-            
-            document.getElementById('g-pvp').innerText = res.pvp;
-            document.getElementById('g-ai').innerText = res.ai;
-            document.getElementById('reset-gato').innerText = res.reset;
-            document.getElementById('reset-c4').innerText = res.reset;
-            document.getElementById('reset-nim').innerText = res.reset;
             document.getElementById('b-dado').innerText = res.dado;
             document.getElementById('b-moneda').innerText = res.moneda;
             document.getElementById('btn-carrera').innerText = res.dado;
-
-            const optD = document.getElementById('tipo-dado').options;
-            optD[0].innerText = res.d6; optD[1].innerText = res.d12; optD[2].innerText = res.d20;
-
+            document.getElementById('reset-gato').innerText = res.reset;
+            document.getElementById('reset-c4').innerText = res.reset;
+            document.getElementById('reset-nim').innerText = res.reset;
+            document.getElementById('reset-memory').innerText = res.reset;
+            
             actualizarTextosEstado();
+            initAhorcado();
             sonarSintetizador('clic');
         }
 
         function actualizarTextosEstado() {
             const res = locales[langActual];
-            if (gatoActivo) document.getElementById('txt-gato').innerText = turnoGato === 'X' ? res.tX : res.tO;
-            if (c4Activo) document.getElementById('txt-c4').innerText = turnoC4 === 1 ? res.tRojo : res.tAzul;
+            let lG = document.getElementById('txt-gato'), lC = document.getElementById('txt-c4');
+            if (gatoActivo) { lG.innerText = turnoGato === 'X' ? res.tX : res.tO; lG.classList.remove('win-glow'); }
+            if (c4Activo) { lC.innerText = turnoC4 === 1 ? res.tRojo : res.tAzul; lC.classList.remove('win-glow'); }
             if (nimActivo) document.getElementById('txt-nim').innerText = res.nimTxt;
             if (carreraActiva) document.getElementById('txt-carrera').innerText = res.carTxt;
+            document.getElementById('txt-cookie').innerText = `${res.cookTxt}${cookiesCount} (${res.cookUpgrade.split('(')[0].trim()}: x${cookieMult})`;
+            document.getElementById('btn-up-cookie').innerText = `${res.cookUpgrade.split('(')[0]} (${res.cookUpgrade.split('(')[1]}${cookieCostUpgrade})`;
         }
 
         // --- AUDIO NATIVO ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function lanzarFrecuencia(f, start, dur, type='sine', vol=0.03) {
+            let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination); osc.type = type;
+            osc.frequency.setValueAtTime(f, audioCtx.currentTime + start);
+            gain.gain.setValueAtTime(vol, audioCtx.currentTime + start);
+            osc.start(audioCtx.currentTime + start); osc.stop(audioCtx.currentTime + start + dur);
+        }
         function sonarSintetizador(tipo) {
             if (audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            if (tipo === 'clic') {
-                osc.type = 'sine'; osc.frequency.setValueAtTime(500, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.03, audioCtx.currentTime); osc.start(); osc.stop(audioCtx.currentTime + 0.04);
-            } else if (tipo === 'exito') {
-                osc.type = 'triangle'; osc.frequency.setValueAtTime(440, audioCtx.currentTime);
-                osc.frequency.setValueAtTime(554.37, audioCtx.currentTime + 0.08);
-                osc.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.16);
-                gain.gain.setValueAtTime(0.05, audioCtx.currentTime); osc.start(); osc.stop(audioCtx.currentTime + 0.3);
-            }
+            if (tipo === 'clic') lanzarFrecuencia(550, 0, 0.04, 'sine', 0.04);
+            if (tipo === 'flip') lanzarFrecuencia(350, 0, 0.05, 'triangle', 0.04);
+            if (tipo === 'error') lanzarFrecuencia(150, 0, 0.25, 'sawtooth', 0.03);
+            if (tipo === 'exito') { lanzarFrecuencia(523.25, 0, 0.07, 'sine', 0.04); lanzarFrecuencia(659.25, 0.07, 0.07, 'sine', 0.04); lanzarFrecuencia(783.99, 0.14, 0.15, 'sine', 0.04); }
         }
         function sonarBoton() { sonarSintetizador('clic'); }
 
-        // --- LÓGICA: TRES EN RAYA ---
-        let turnoGato = 'X', gatoActivo = true, tableroGato = ["","","","","","","","",""];
+        // --- 1. TRES EN RAYA ---
+        let turnoGato = 'X', gatoActivo = true, tableroGato = Array(9).fill("");
         function clickGato(i) {
             if (tableroGato[i] !== "" || !gatoActivo) return;
-            sonarSintetizador('clic');
-            tableroGato[i] = turnoGato;
+            sonarSintetizador('clic'); tableroGato[i] = turnoGato;
             const celdas = document.getElementsByClassName('celda-gato');
-            celdas[i].innerText = turnoGato;
-            celdas[i].style.color = turnoGato === 'X' ? 'var(--p1-color)' : 'var(--p2-color)';
-            
+            celdas[i].innerText = turnoGato; celdas[i].style.color = turnoGato === 'X' ? 'var(--p1-color)' : 'var(--p2-color)';
             if (checkWinGato()) {
-                document.getElementById('txt-gato').innerText = turnoGato === 'X' ? locales[langActual].gX : locales[langActual].gO;
-                gatoActivo = false; sonarSintetizador('exito'); return;
+                let lbl = document.getElementById('txt-gato'); lbl.innerText = turnoGato === 'X' ? locales[langActual].gX : locales[langActual].gO;
+                lbl.classList.add('win-glow'); gatoActivo = false; sonarSintetizador('exito'); return;
             }
             if (!tableroGato.includes("")) { document.getElementById('txt-gato').innerText = locales[langActual].empate; gatoActivo = false; return; }
-            
-            turnoGato = turnoGato === 'X' ? 'O' : 'X';
-            actualizarTextosEstado();
+            turnoGato = turnoGato === 'X' ? 'O' : 'X'; actualizarTextosEstado();
+            if (document.getElementById('modo-gato').value === 'AI' && turnoGato === 'O' && gatoActivo) setTimeout(jugadaAIGato, 300);
+        }
+        function jugadaAIGato() { let libres = []; tableroGato.forEach((c, idx) => { if(c==="") libres.push(idx); }); if (libres.length > 0) clickGato(libres[Math.floor(Math.random() * libres.length)]); }
+        function checkWinGato() { const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]]; return wins.some(w => tableroGato[w[0]] && tableroGato[w[0]]===tableroGato[w[1]] && tableroGato[w[0]]===tableroGato[w[2]]); }
+        function reiniciarGato() { turnoGato = 'X'; gatoActivo = true; tableroGato.fill(""); const celdas = document.getElementsByClassName('celda-gato'); for(let c of celdas) c.innerText = ""; actualizarTextosEstado(); }
 
-            if (document.getElementById('modo-gato').value === 'AI' && turnoGato === 'O' && gatoActivo) {
-                setTimeout(jugadaAIGato, 400);
-            }
-        }
-        function jugadaAIGato() {
-            let libres = [];
-            tableroGato.forEach((c, idx) => { if(c==="") libres.push(idx); });
-            if (libres.length > 0) { clickGato(libres[Math.floor(Math.random() * libres.length)]); }
-        }
-        function checkWinGato() {
-            const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-            return wins.some(w => tableroGato[w[0]] && tableroGato[w[0]]===tableroGato[w[1]] && tableroGato[w[0]]===tableroGato[w[2]]);
-        }
-        function reiniciarGato() {
-            turnoGato = 'X'; gatoActivo = true; tableroGato.fill("");
-            const celdas = document.getElementsByClassName('celda-gato');
-            for(let c of celdas) c.innerText = "";
-            actualizarTextosEstado();
-        }
-
-        // --- LÓGICA: CONECTA 4 ---
+        // --- 2. CONECTA 4 ---
         let turnoC4 = 1, c4Activo = true, matrizC4 = Array(6).fill(null).map(()=>Array(7).fill(0));
         function initC4() {
             const htmlBoard = document.getElementById('board-c4'); htmlBoard.innerHTML = '';
             for (let r = 0; r < 6; r++) {
-                for (let c = 0; c < 7; r++) { // Corregido el bucle interno para evitar bucles infinitos
-                    // Corrección manual del bucle for anidado tradicional
-                }
-            }
-            // Re-renderizado limpio y seguro del mapa de Conecta 4:
-            htmlBoard.innerHTML = '';
-            for (let r = 0; r < 6; r++) {
                 for (let c = 0; c < 7; c++) {
-                    let div = document.createElement('div'); div.className = 'ficha-c4';
-                    div.dataset.row = r; div.dataset.col = c;
+                    let div = document.createElement('div'); div.className = 'ficha-c4'; div.dataset.row = r; div.dataset.col = c;
                     div.onclick = () => clickC4(c); htmlBoard.appendChild(div);
                 }
             }
@@ -444,8 +523,8 @@
                     let target = document.querySelector(`[data-row='${r}'][data-col='${c}']`);
                     target.style.background = turnoC4 === 1 ? 'var(--p1-color)' : 'var(--p2-color)';
                     if (checkWinC4(r, c)) {
-                        document.getElementById('txt-c4').innerText = turnoC4 === 1 ? locales[langActual].gRojo : locales[langActual].gAzul;
-                        c4Activo = false; sonarSintetizador('exito'); return;
+                        let lbl = document.getElementById('txt-c4'); lbl.innerText = turnoC4 === 1 ? locales[langActual].gRojo : locales[langActual].gAzul;
+                        lbl.classList.add('win-glow'); c4Activo = false; sonarSintetizador('exito'); return;
                     }
                     turnoC4 = turnoC4 === 1 ? 2 : 1; actualizarTextosEstado(); break;
                 }
@@ -463,88 +542,191 @@
         }
         function reiniciarC4() { c4Activo = true; turnoC4 = 1; matrizC4 = Array(6).fill(null).map(()=>Array(7).fill(0)); initC4(); actualizarTextosEstado(); }
 
-        // --- LÓGICA: JUEGO DEL NIM ---
+        // --- 3. JUEGO DEL NIM ---
         let cantNim = 15, nimActivo = true, turnoNim = 1;
-        function initNim() {
-            const board = document.getElementById('board-nim'); board.innerHTML = '';
-            for(let i=0; i<cantNim; i++) { let d = document.createElement('div'); d.className = 'cerilla'; board.appendChild(d); }
-        }
+        function initNim() { const board = document.getElementById('board-nim'); board.innerHTML = ''; for(let i=0; i<cantNim; i++) { let d = document.createElement('div'); d.className = 'cerilla'; board.appendChild(d); } }
         function retirarNim(cant) {
             if (!nimActivo || turnoNim !== 1 || cantNim <= 0) return;
             ejecutarRetiroNim(cant);
-            if (cantNim === 0) {
-                document.getElementById('txt-nim').innerText = locales[langActual].nimGanaP2; nimActivo = false; return;
-            }
-            turnoNim = 2; setTimeout(jugadaAINim, 600);
+            if (cantNim === 0) { document.getElementById('txt-nim').innerText = locales[langActual].nimGanaP2; nimActivo = false; sonarSintetizador('error'); return; }
+            turnoNim = 2; setTimeout(jugadaAINim, 500);
         }
         function ejecutarRetiroNim(cant) {
-            sonarSintetizador('clic');
-            let realC = Math.min(cant, cantNim); cantNim -= realC;
+            let realC = Math.min(cant, cantNim); cantNim -= realC; sonarSintetizador('clic');
             const sticks = document.getElementsByClassName('cerilla');
-            for(let i=0; i<realC; i++) {
-                let idx = sticks.length - 1 - cantNim - i;
-                if(sticks[idx]) sticks[idx].classList.add('eliminada');
-            }
+            for(let i=0; i<realC; i++) { let idx = sticks.length - 1 - cantNim - i; if(sticks[idx]) sticks[idx].classList.add('eliminada'); }
         }
         function jugadaAINim() {
             if(!nimActivo) return;
             let tomar = (cantNim - 1) % 4; if (tomar === 0) tomar = 1;
             ejecutarRetiroNim(tomar);
-            if(cantNim === 0) {
-                document.getElementById('txt-nim').innerText = locales[langActual].nimGanaP1; nimActivo = false; sonarSintetizador('exito'); return;
-            }
+            if(cantNim === 0) { document.getElementById('txt-nim').innerText = locales[langActual].nimGanaP1; nimActivo = false; sonarSintetizador('exito'); return; }
             turnoNim = 1; actualizarTextosEstado();
         }
         function reiniciarNim() { cantNim = 15; nimActivo = true; turnoNim = 1; initNim(); actualizarTextosEstado(); }
 
-        // --- LÓGICA: CARRERA DE DADOS ---
+        // --- 4. CARRERA DE DADOS ---
         let p1Score = 0, p2Score = 0, carreraActiva = true;
         function jugarCarrera() {
             if (!carreraActiva) return;
-            sonarSintetizador('clic');
-            let dado = Math.floor(Math.random() * 6) + 1;
-            const faces = ['⚀','⚁','⚂','⚃','⚄','⚅'];
-            document.getElementById('dado-carrera').innerText = faces[dado-1];
+            sonarSintetizador('clic'); let dado = Math.floor(Math.random() * 6) + 1;
+            document.getElementById('dado-carrera').innerText = ['⚀','⚁','⚂','⚃','⚄','⚅'][dado-1];
             p1Score += dado; document.getElementById('score-p1').innerText = p1Score;
-
-            if (p1Score >= 50) {
-                document.getElementById('txt-carrera').innerText = locales[langActual].carGanaP1; carreraActiva = false; sonarSintetizador('exito'); return;
-            }
+            if (p1Score >= 50) { document.getElementById('txt-carrera').innerText = locales[langActual].carGanaP1; carreraActiva = false; sonarSintetizador('exito'); return; }
             setTimeout(() => {
-                let dadoIA = Math.floor(Math.random() * 6) + 1;
-                p2Score += dadoIA; document.getElementById('score-p2').innerText = p2Score;
-                if (p2Score >= 50) {
-                    document.getElementById('txt-carrera').innerText = locales[langActual].carGanaP2; carreraActiva = false;
-                }
-            }, 400);
+                let dIA = Math.floor(Math.random() * 6) + 1; p2Score += dIA; document.getElementById('score-p2').innerText = p2Score;
+                if (p2Score >= 50) { document.getElementById('txt-carrera').innerText = locales[langActual].carGanaP2; carreraActiva = false; sonarSintetizador('error'); }
+            }, 300);
         }
 
-        // --- UTILERÍA DE AZAR ---
-        function lanzarCajaDado() {
+        // --- 5. MEMORY ---
+        let listaMemory = ['🦊','🦊','🐼','🐼','🦁','🦁','🐸','🐸','🐙','🐙','🦄','🦄','🐷','🐷','🐵','🐵'];
+        let cartasSeleccionadas = [], memoryCompletado = false, bloqueadoMemory = false;
+        function initMemory() {
+            memoryCompletado = false; bloqueadoMemory = false; cartasSeleccionadas = [];
+            let shuffled = listaMemory.sort(() => Math.random() - 0.5);
+            const b = document.getElementById('board-memory'); b.innerHTML = '';
+            shuffled.forEach((emoji, idx) => {
+                let card = document.createElement('div'); card.className = 'carta-memory'; card.dataset.value = emoji;
+                card.innerHTML = `<span>${emoji}</span>`; card.onclick = () => {
+                    if(bloqueadoMemory || card.classList.contains('volteada') || card.classList.contains('emparejada')) return;
+                    sonarSintetizador('flip'); card.classList.add('volteada'); cartasSeleccionadas.push(card);
+                    if(cartasSeleccionadas.length === 2) { bloqueadoMemory = true; setTimeout(verificarMemory, 500); }
+                }; b.appendChild(card);
+            });
+        }
+        function verificarMemory() {
+            let [c1, c2] = cartasSeleccionadas;
+            if(c1.dataset.value === c2.dataset.value) { c1.classList.add('emparejada'); c2.classList.add('emparejada'); }
+            else { c1.classList.remove('volteada'); c2.classList.remove('volteada'); }
+            cartasSeleccionadas = []; bloqueadoMemory = false;
+            if(document.querySelectorAll('.emparejada').length === listaMemory.length) { document.getElementById('txt-memory').innerText = locales[langActual].memWin; sonarSintetizador('exito'); }
+        }
+        function reiniciarMemory() { initMemory(); actualizarTextosEstado(); }
+
+        // --- 6. PPTLS ---
+        function jugarPPT(p1) {
+            sonarSintetizador('clic'); const pool = ['💎', '📄', '✂️', '🦎', '🖖']; const ia = pool[Math.floor(Math.random() * pool.length)];
+            document.getElementById('ppt-p1').innerText = `Tú: ${p1}`; document.getElementById('ppt-p2').innerText = `IA: ${ia}`;
+            if(p1 === ia) { document.getElementById('txt-ppt').innerText = locales[langActual].empate; return; }
+            const win = {'✂️': ['📄', '🦎'], '📄': ['💎', '🖖'], '💎': ['🦎', '✂️'], '🦎': ['🖖', '📄'], '🖖': ['✂️', '💎']};
+            if(win[p1].includes(ia)) { document.getElementById('txt-ppt').innerText = locales[langActual].pptWin; sonarSintetizador('exito'); }
+            else { document.getElementById('txt-ppt').innerText = locales[langActual].pptLose; sonarSintetizador('error'); }
+        }
+
+        // --- 7. SNAKE (NUEVO) ---
+        let canvasSnake, ctxSnake, snake, snakeFood, snakeDir, snakeGameInterval, snakeScore;
+        function initSnake() {
+            canvasSnake = document.getElementById('canvas-snake'); ctxSnake = canvasSnake.getContext('2d');
+            snake = [{x: 10, y: 10}]; snakeFood = {x: 5, y: 5}; snakeDir = 'RIGHT'; snakeScore = 0;
+            document.getElementById('txt-snake').innerText = locales[langActual].snkScore + snakeScore;
+            clearInterval(snakeGameInterval); snakeGameInterval = setInterval(loopSnake, 130);
+        }
+        function cambiarDirSnake(d) {
             sonarSintetizador('clic');
-            const sides = parseInt(document.getElementById('tipo-dado').value);
-            const disp = document.getElementById('res-d6');
-            let rolls = 0;
-            let inter = setInterval(() => {
-                disp.innerText = Math.floor(Math.random() * sides) + 1; rolls++;
-                if(rolls > 6) clearInterval(inter);
-            }, 60);
+            if(d==='LEFT' && snakeDir!=='RIGHT') snakeDir = 'LEFT';
+            if(d==='RIGHT' && snakeDir!=='LEFT') snakeDir = 'RIGHT';
+            if(d==='UP' && snakeDir!=='DOWN') snakeDir = 'UP';
+            if(d==='DOWN' && snakeDir!=='UP') snakeDir = 'DOWN';
+        }
+        function loopSnake() {
+            let head = Object.assign({}, snake[0]);
+            if(snakeDir === 'RIGHT') head.x++; if(snakeDir === 'LEFT') head.x--;
+            if(snakeDir === 'UP') head.y--; if(snakeDir === 'DOWN') head.y++;
+            if(head.x < 0 || head.x >= 28 || head.y < 0 || head.y >= 20 || snake.some(s => s.x === head.x && s.y === head.y)) {
+                clearInterval(snakeGameInterval); sonarSintetizador('error'); document.getElementById('txt-snake').innerText = locales[langActual].snkOver; return;
+            }
+            snake.unshift(head);
+            if(head.x === snakeFood.x && head.y === snakeFood.y) {
+                snakeScore++; document.getElementById('txt-snake').innerText = locales[langActual].snkScore + snakeScore;
+                lanzarFrecuencia(900, 0, 0.05, 'sine', 0.05);
+                snakeFood = { x: Math.floor(Math.random()*28), y: Math.floor(Math.random()*20) };
+            } else { snake.pop(); }
+            ctxSnake.clearRect(0,0,280,200); ctxSnake.fillStyle = '#10ac84';
+            snake.forEach(s => ctxSnake.fillRect(s.x*10, s.y*10, 9, 9));
+            ctxSnake.fillStyle = '#ff7675'; ctxSnake.fillRect(snakeFood.x*10, snakeFood.y*10, 9, 9);
+        }
+
+        // --- 8. AHORCADO (NUEVO) ---
+        const dics = { es: ["CASA", "DADO", "GATO", "MESA", "JUEGO", "CONSOLA"], en: ["HOME", "DICE", "CATS", "DESK", "GAME", "CONSOLE"], fr: ["CHAT", "TABLE", "JEUX", "CONSOLE", "MAISON", "DES"] };
+        let hangPalabra, hangAdivinado, hangVidas;
+        function initAhorcado() {
+            let pool = dics[langActual] || dics['es']; hangPalabra = pool[Math.floor(Math.random()*pool.length)];
+            hangAdivinado = Array(hangPalabra.length).fill("_"); hangVidas = 6;
+            document.getElementById('txt-hangman').innerText = locales[langActual].hangVidas + hangVidas;
+            document.getElementById('palabra-ahorcado').innerText = hangAdivinado.join(" ");
+            const teclado = document.getElementById('teclado-ahorcado'); teclado.innerHTML = '';
+            let letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+            letras.forEach(l => {
+                let btn = document.createElement('button'); btn.className = 'letra-btn'; btn.innerText = l;
+                btn.onclick = () => {
+                    btn.disabled = true;
+                    if(hangPalabra.includes(l)) {
+                        sonarSintetizador('clic');
+                        for(let i=0; i<hangPalabra.length; i++) { if(hangPalabra[i] === l) hangAdivinado[i] = l; }
+                        document.getElementById('palabra-ahorcado').innerText = hangAdivinado.join(" ");
+                        if(!hangAdivinado.includes("_")) { document.getElementById('txt-hangman').innerText = locales[langActual].hangWin; sonarSintetizador('exito'); toggleTecladoHang(true); }
+                    } else {
+                        hangVidas--; sonarSintetizador('error'); document.getElementById('txt-hangman').innerText = locales[langActual].hangVidas + hangVidas;
+                        if(hangVidas <= 0) { document.getElementById('txt-hangman').innerText = locales[langActual].hangLose + hangPalabra; toggleTecladoHang(true); }
+                    }
+                }; teclado.appendChild(btn);
+            });
+        }
+        function toggleTecladoHang(dis) { document.querySelectorAll('.letra-btn').forEach(b => b.disabled = dis); }
+
+        // --- 9. COOKIE CLICKER (NUEVO) ---
+        let cookiesCount = 0, cookieMult = 1, cookieCostUpgrade = 15;
+        function clickGalleta() { cookiesCount += cookieMult; lanzarFrecuencia(400 + (cookieMult*5), 0, 0.03, 'sine', 0.05); actualizarTextosEstado(); }
+        function comprarUpgradeCookie() {
+            if(cookiesCount >= cookieCostUpgrade) {
+                cookiesCount -= cookieCostUpgrade; cookieMult++; cookieCostUpgrade = Math.floor(cookieCostUpgrade * 1.8);
+                sonarSintetizador('exito'); actualizarTextosEstado();
+            } else { sonarSintetizador('error'); }
+        }
+
+        // --- 10. SIMÓN DICE (NUEVO) ---
+        let simonSec = [], simonUserSec = [], simonEnJuego = false, simonIndex = 0;
+        const simonNotas = [329.63, 261.63, 392.00, 440.00]; // Mi, Do, Sol, La
+        function initSimon() { simonSec = []; simonEnJuego = true; siguientePasoSimon(); }
+        function siguientePasoSimon() {
+            simonUserSec = []; simonIndex = 0; simonSec.push(Math.floor(Math.random()*4));
+            reproducirSecuenciaSimon();
+        }
+        function reproducirSecuenciaSimon() {
+            let i = 0; document.getElementById('txt-simon').innerText = "...";
+            let interval = setInterval(() => {
+                iluminarPadSimon(simonSec[i]); i++;
+                if(i >= simonSec.length) { clearInterval(interval); document.getElementById('txt-simon').innerText = locales[langActual].simGo; }
+            }, 600);
+        }
+        function iluminarPadSimon(id) {
+            let p = document.getElementById('simon-' + id); p.classList.add('lit');
+            lanzarFrecuencia(simonNotas[id], 0, 0.25, 'triangle', 0.06);
+            setTimeout(() => p.classList.remove('lit'), 300);
+        }
+        function clickSimon(id) {
+            if(!simonEnJuego || document.getElementById('txt-simon').innerText === "...") return;
+            iluminarPadSimon(id); simonUserSec.push(id);
+            if(simonUserSec[simonIndex] !== simonSec[simonIndex]) {
+                document.getElementById('txt-simon').innerText = locales[langActual].simErr; sonarSintetizador('error'); simonEnJuego = false; return;
+            }
+            simonIndex++;
+            if(simonIndex === simonSec.length) { setTimeout(siguientePasoSimon, 800); }
+        }
+
+        // --- AZAR EN CAJA ---
+        function lanzarCajaDado() {
+            sonarSintetizador('clic'); const sides = parseInt(document.getElementById('tipo-dado').value); const disp = document.getElementById('res-d6');
+            let rolls = 0; let inter = setInterval(() => { disp.innerText = Math.floor(Math.random() * sides) + 1; rolls++; if(rolls > 6) clearInterval(inter); }, 60);
         }
         function lanzarMoneda() {
-            sonarSintetizador('clic');
-            const disp = document.getElementById('res-moneda');
-            let rolls = 0;
-            let inter = setInterval(() => {
-                disp.innerText = Math.random() < 0.5 ? "🪙" : "🍁"; rolls++;
-                if(rolls > 6) {
-                    clearInterval(inter);
-                    disp.innerText = Math.random() < 0.5 ? locales[langActual].cara : locales[langActual].cruz;
-                }
-            }, 60);
+            sonarSintetizador('clic'); const disp = document.getElementById('res-moneda');
+            let rolls = 0; let inter = setInterval(() => { disp.innerText = Math.random() < 0.5 ? "🪙" : "🍁"; rolls++; if(rolls > 6) { clearInterval(inter); disp.innerText = Math.random() < 0.5 ? locales[langActual].cara : locales[langActual].cruz; } }, 60);
         }
 
-        // --- INICIALIZACIONES INICIALES ---
-        initC4(); initNim();
+        // --- CARGA INICIAL ---
+        initC4(); initNim(); initMemory(); initSnake(); initAhorcado(); actualizarTextosEstado();
     </script>
 </body>
 </html>
