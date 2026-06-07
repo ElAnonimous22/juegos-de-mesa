@@ -32,14 +32,14 @@
 
         *, *::before, *::after { box-sizing: border-box; }
 
-        /* --- CONTENEDOR LATERAL (SELECTOR DE JUEGOS) --- */
+        /* --- SELECTOR LATERAL FIXED --- */
         .sidebar {
             width: var(--sidebar-width);
-            background: rgba(34, 47, 62, 0.95);
+            background: rgba(34, 47, 62, 0.98);
             padding: 20px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             border-right: 3px solid var(--accent-board);
             height: 100vh;
             position: fixed;
@@ -58,10 +58,10 @@
         }
 
         .btn-menu-juego {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
             color: white;
             border: 2px solid transparent;
-            padding: 12px 15px;
+            padding: 10px 15px;
             border-radius: 12px;
             cursor: pointer;
             text-align: left;
@@ -90,29 +90,24 @@
         }
         .btn-apps-externas:hover { background: var(--btn-apps); color: white; }
 
-        /* --- CONFIGURACIÓN TOP BAR --- */
         .top-bar {
             position: absolute;
             top: 20px;
             right: 20px;
             z-index: 90;
-            display: flex;
-            gap: 15px;
-            align-items: center;
         }
 
         .selector-idioma {
             background: white;
-            padding: 8px 15px;
+            padding: 6px 12px;
             border-radius: 20px;
             border: 2px solid var(--accent-board);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         .selector-idioma select {
-            border: none; font-size: 16px; font-weight: bold; outline: none; cursor: pointer; color: var(--accent-board);
+            border: none; font-size: 15px; font-weight: bold; outline: none; cursor: pointer; color: var(--accent-board);
         }
 
-        /* --- ÁREA PRINCIPAL DE PANTALLA GRANDE --- */
+        /* --- CONTENEDOR PANTALLA GRANDE --- */
         .hub-container {
             margin-left: var(--sidebar-width);
             flex-grow: 1;
@@ -128,158 +123,139 @@
             font-size: 2.5rem;
             color: white;
             margin-top: 0;
-            margin-bottom: 25px;
-            text-align: center;
+            margin-bottom: 20px;
             text-shadow: 2px 2px 8px rgba(0,0,0,0.3);
         }
 
-        /* VISTA DE JUEGO INDIVIDUAL EN GRANDE */
         .escenario-juego {
             width: 100%;
-            max-width: 850px;
-            min-height: 550px;
+            max-width: 750px;
+            min-height: 500px;
             background: var(--glass-bg);
-            border-radius: 30px;
-            padding: 40px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-            display: none; /* Controlado por JS */
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 20px 45px rgba(0,0,0,0.25);
+            display: none;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            animation: fadeIn 0.4s ease-out;
+            animation: fadeIn 0.3s ease-out;
         }
 
         .escenario-juego.activo { display: flex; }
 
         .escenario-juego h2 {
-            font-size: 2.2rem;
+            font-size: 2rem;
             color: var(--text-dark);
             margin-top: 0;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             text-align: center;
         }
 
-        .turno-txt { font-weight: bold; margin-bottom: 20px; font-size: 1.4rem; min-height: 30px; text-align: center; }
-        .win-glow { animation: pulseGlow 0.8s infinite alternate; color: #10ac84; font-size: 1.6rem; }
+        .turno-txt { font-weight: bold; margin-bottom: 15px; font-size: 1.3rem; min-height: 28px; text-align: center; }
+        .win-glow { animation: pulseGlow 0.8s infinite alternate; color: #10ac84; font-size: 1.5rem; }
 
         .btn-accion {
             background: linear-gradient(45deg, var(--primary), #ff7675);
-            color: white; border: none; padding: 12px 30px; font-size: 1.1rem;
-            font-weight: bold; border-radius: 15px; cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: transform 0.1s;
-            margin: 10px;
+            color: white; border: none; padding: 12px 25px; font-size: 1rem;
+            font-weight: bold; border-radius: 12px; cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: transform 0.1s;
+            margin: 5px;
         }
         .btn-accion:hover { transform: scale(1.05); }
-        select.select-modo { padding: 8px 15px; border-radius: 10px; font-weight: bold; margin-bottom: 15px; font-size: 1rem; }
+        select.select-modo { padding: 6px 12px; border-radius: 8px; font-weight: bold; font-size: 0.95rem; }
 
-        /* --- 1. GATO (PANTALLA GRANDE) --- */
-        .tablero-gato { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; max-width: 320px; margin: 0 auto 20px auto; }
+        /* --- DISENOS DE JUEGOS AMPLIADOS --- */
+        .tablero-gato { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 280px; height: 280px; margin: 0 auto 15px auto; }
         .celda-gato {
-            background: #f1f2f6; aspect-ratio: 1; border-radius: 15px; font-size: 3rem;
+            background: #f1f2f6; border-radius: 15px; font-size: 3rem;
             font-weight: bold; display: flex; align-items: center; justify-content: center;
             cursor: pointer; border: 3px solid #ced6e0; transition: background 0.2s;
         }
         .celda-gato:hover { background: #e4e7eb; }
 
-        /* --- 2. CONECTA 4 (PANTALLA GRANDE) --- */
         .tablero-c4 {
-            display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px;
-            background: #2e86de; padding: 15px; border-radius: 20px; width: 100%; max-width: 480px; margin: 0 auto 20px auto;
+            display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px;
+            background: #2e86de; padding: 12px; border-radius: 18px; width: 420px; margin: 0 auto 15px auto;
         }
-        .ficha-c4 { background: white; aspect-ratio: 1; border-radius: 50%; cursor: pointer; box-shadow: inset 0 4px 8px rgba(0,0,0,0.3); transition: background 0.2s; }
+        .ficha-c4 { background: white; aspect-ratio: 1; border-radius: 50%; cursor: pointer; box-shadow: inset 0 3px 6px rgba(0,0,0,0.25); }
 
-        /* --- 3. NIM --- */
-        .contenedor-nim { display: flex; justify-content: center; gap: 20px; margin: 30px 0; min-height: 120px; align-items: flex-end;}
-        .cerilla { width: 18px; height: 100px; background: #ff9f43; border-radius: 5px; position: relative; transition: all 0.3s; }
-        .cerilla::before { content: ''; position: absolute; top: -15px; left: -3px; width: 24px; height: 20px; background: #ee5253; border-radius: 50%; }
-        .cerilla.eliminada { transform: translateY(-30px); opacity: 0; pointer-events: none; }
+        .contenedor-nim { display: flex; justify-content: center; gap: 15px; margin: 25px 0; min-height: 110px; align-items: flex-end;}
+        .cerilla { width: 15px; height: 90px; background: #ff9f43; border-radius: 4px; position: relative; transition: all 0.3s; cursor:pointer;}
+        .cerilla::before { content: ''; position: absolute; top: -12px; left: -3px; width: 21px; height: 16px; background: #ee5253; border-radius: 50%; }
+        .cerilla.eliminada { transform: translateY(-25px); opacity: 0; pointer-events: none; }
 
-        /* --- 4. CARRERA DADOS --- */
-        .marcador-carrera { display: flex; justify-content: space-around; width: 100%; font-weight: bold; font-size: 1.6rem; margin-bottom: 20px; }
+        .marcador-carrera { display: flex; justify-content: space-around; width: 100%; font-weight: bold; font-size: 1.5rem; margin-bottom: 15px; }
 
-        /* --- 5. MEMORY --- */
-        .tablero-memory { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; width: 100%; max-width: 380px; margin: 0 auto 20px auto; }
+        .tablero-memory { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 320px; margin: 0 auto 15px auto; }
         .carta-memory {
             aspect-ratio: 1; background: var(--card-back); border-radius: 12px; cursor: pointer;
             position: relative; transform-style: preserve-3d; transition: transform 0.3s;
-            display: flex; align-items: center; justify-content: center; font-size: 2.2rem; color: transparent;
+            display: flex; align-items: center; justify-content: center; font-size: 2rem; color: transparent;
         }
         .carta-memory.volteada { transform: rotateY(180deg); background: #f1f2f6; color: initial; border: 3px solid var(--card-back); }
         .carta-memory.volteada span { transform: rotateY(180deg); display: inline-block; }
         .carta-memory.emparejada { background: #10ac84; color: white; cursor: default; pointer-events: none; transform: rotateY(180deg); }
         .carta-memory.emparejada span { transform: rotateY(180deg); display: inline-block; }
 
-        /* --- 6. PPTLS --- */
-        .opciones-ppt { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; }
-        .btn-ppt { font-size: 2.5rem; padding: 15px; border-radius: 18px; background: #f5f6fa; border: 2px solid #ced6e0; cursor: pointer; transition: transform 0.1s; }
+        .opciones-ppt { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 15px; }
+        .btn-ppt { font-size: 2.2rem; padding: 12px; border-radius: 15px; background: #f5f6fa; border: 2px solid #ced6e0; cursor: pointer; transition: transform 0.1s; }
         .btn-ppt:hover { transform: scale(1.1); }
 
-        /* --- 7. SNAKE --- */
-        .contenedor-canvas-snake { position: relative; background: #000; width: 400px; height: 280px; margin: 0 auto 15px auto; border-radius: 12px; overflow: hidden; border: 4px solid #333; }
-        canvas { display: block; background: #111; width: 100%; height: 100%; }
-        .controles-snake { display: grid; grid-template-columns: repeat(3, 1fr); width: 160px; margin: 0 auto; gap: 8px; }
-        .btn-dir { background: #ced6e0; border: none; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 1.1rem; cursor: pointer; }
+        .contenedor-canvas-snake { background: #000; width: 340px; height: 240px; margin: 0 auto 15px auto; border-radius: 10px; overflow: hidden; border: 4px solid #333; }
+        canvas { display: block; background: #111; }
+        .controles-snake { display: grid; grid-template-columns: repeat(3, 1fr); width: 140px; margin: 0 auto; gap: 6px; }
+        .btn-dir { background: #ced6e0; border: none; padding: 10px; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer; }
 
-        /* --- 8. AHORCADO --- */
-        .palabra-ahorcado { font-size: 2.5rem; letter-spacing: 10px; font-weight: bold; margin: 25px 0; min-height: 50px; color: #2f3542; text-align: center; }
-        .teclado-ahorcado { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; max-width: 500px; margin: 0 auto; }
-        .letra-btn { background: #f1f2f6; border: 1px solid #ced6e0; border-radius: 8px; padding: 10px 15px; font-weight: bold; font-size: 1.1rem; cursor: pointer; }
+        .palabra-ahorcado { font-size: 2.2rem; letter-spacing: 8px; font-weight: bold; margin: 20px 0; min-height: 45px; color: #2f3542; text-align: center; }
+        .teclado-ahorcado { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; max-width: 450px; margin: 0 auto; }
+        .letra-btn { background: #f1f2f6; border: 1px solid #ced6e0; border-radius: 6px; padding: 8px 12px; font-weight: bold; font-size: 1rem; cursor: pointer; }
         .letra-btn:disabled { opacity: 0.4; cursor: default; }
 
-        /* --- 9. COOKIE CLICKER --- */
-        .cookie-img { font-size: 7rem; cursor: pointer; display: inline-block; transition: transform 0.1s; margin: 20px 0; }
+        .cookie-img { font-size: 6.5rem; cursor: pointer; display: inline-block; transition: transform 0.1s; margin: 15px 0; }
         .cookie-img:active { transform: scale(0.85); }
 
-        /* --- 10. SIMON SAYS --- */
-        .panel-simon { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 280px; margin: 0 auto 20px auto; }
-        .pad-simon { aspect-ratio: 1; border-radius: 20px; opacity: 0.6; cursor: pointer; transition: opacity 0.1s; border: 4px solid #222f3e; }
+        .panel-simon { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 240px; margin: 0 auto 15px auto; }
+        .pad-simon { aspect-ratio: 1; border-radius: 15px; opacity: 0.6; cursor: pointer; transition: opacity 0.1s; border: 4px solid #222f3e; }
         .pad-simon:active, .pad-simon.lit { opacity: 1; filter: brightness(1.3); }
         .s-verde { background: #2ecc71; } .s-rojo { background: #e74c3c; }
         .s-amarillo { background: #f1c40f; } .s-azul { background: #3498db; }
 
-        /* --- AZAR --- */
-        .flex-herramientas { display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 30px; width: 100%; }
+        .flex-herramientas { display: flex; justify-content: space-around; align-items: center; flex-wrap: wrap; gap: 25px; width: 100%; }
         .display-resultado {
-            font-size: 4rem; margin-bottom: 15px; min-height: 100px; display: flex;
-            align-items: center; justify-content: center; background: #f5f6fa; border-radius: 20px; border: 3px dashed #b2bec3; padding: 10px 30px;
+            font-size: 3.5rem; margin-bottom: 12px; min-height: 90px; display: flex;
+            align-items: center; justify-content: center; background: #f5f6fa; border-radius: 18px; border: 3px dashed #b2bec3; padding: 10px 25px;
         }
 
-        /* --- KEYFRAMES --- */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        @keyframes pulseGlow {
-            0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(16,172,132,0.4)); }
-            100% { transform: scale(1.03); filter: drop-shadow(0 0 15px rgba(16,172,132,0.8)); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulseGlow { 0% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(16,172,132,0.4)); } 100% { transform: scale(1.03); filter: drop-shadow(0 0 12px rgba(16,172,132,0.7)); } }
 
-        /* REPOSITORIO RESPONSIVO */
         @media (max-width: 950px) {
             body { flex-direction: column; }
             .sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 3px solid var(--accent-board); }
-            .hub-container { margin-left: 0; padding: 20px; }
-            .top-bar { position: static; margin-bottom: 20px; justify-content: center; }
+            .hub-container { margin-left: 0; padding: 15px; }
+            .top-bar { position: static; margin-bottom: 15px; text-align: center; }
+            .tablero-c4 { width: 100%; max-width: 340px; }
         }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
-        <h2 id="lbl-seleccionar">🕹️ Selecciona un Juego</h2>
-        <button class="btn-menu-juego activo" onclick="cambiarEscenario(0, this)">⭕ Tres en Raya</button>
-        <button class="btn-menu-juego" onclick="cambiarEscenario(1, this)">🔵 Conecta 4</button>
-        <button class="btn-menu-juego" onclick="cambiarEscenario(2, this)">🥢 Juego NIM</button>
-        <button class="btn-menu-juego" onclick="cambiarEscenario(3, this)">🏃 Carrera Dados</button>
-        <button class="btn-menu-juego" onclick="cambiarEscenario(4, this)">🧠 Memoria</button>
-        <button class="btn-menu-juego" onclick="cambiarEscenario(5, this)">✂️ PPTLS</button>
-        <button class="btn-menu-juego" onclick="cambiarEscenario(6, this)">🐍 Snake Arcade</button>
-        <button class="btn-menu-juego" onclick="cambiarEscenario(7, this)">🪵 El Ahorcado</button>
-        <button class="btn-menu-juego" onclick="cambiarEscenario(8, this)">🍪 Cookie Clicker</button>
-        <button class="btn-menu-juego" onclick="cambiarEscenario(9, this)">💡 Simón Dice</button>
-        <button class="btn-menu-juego" onclick="cambiarEscenario(10, this)">🎛️ Herramientas Azar</button>
+        <h2 id="lbl-seleccionar">🕹️ Elige un Juego</h2>
+        <button class="btn-menu-juego activo" onclick="cambiarJuego(0, this)">⭕ Tres en Raya</button>
+        <button class="btn-menu-juego" onclick="cambiarJuego(1, this)">🔵 Conecta 4</button>
+        <button class="btn-menu-juego" onclick="cambiarJuego(2, this)">🥢 Estrategia NIM</button>
+        <button class="btn-menu-juego" onclick="cambiarJuego(3, this)">🏃 Carrera Dados</button>
+        <button class="btn-menu-juego" onclick="cambiarJuego(4, this)">🧠 Parejas Memoria</button>
+        <button class="btn-menu-juego" onclick="cambiarJuego(5, this)">✂️ PPTLS Arcade</button>
+        <button class="btn-menu-juego" onclick="cambiarJuego(6, this)">🐍 Serpiente Clásica</button>
+        <button class="btn-menu-juego" onclick="cambiarJuego(7, this)">🪵 El Ahorcado</button>
+        <button class="btn-menu-juego" onclick="cambiarJuego(8, this)">🍪 Cookie Clicker</button>
+        <button class="btn-menu-juego" onclick="cambiarJuego(9, this)">💡 Simón Dice</button>
+        <button class="btn-menu-juego" onclick="cambiarJuego(10, this)">🎛️ Modulo de Azar</button>
         
-        <a href="https://elanonimous22.github.io/math-app/" target="_blank" class="btn-apps-externas" id="lbl-apps" onclick="sonarBoton()">🚀 Más Aplicaciones</a>
+        <a href="https://elanonimous22.github.io/math-app/" target="_blank" class="btn-apps-externas" id="lbl-apps">🚀 Más Aplicaciones</a>
     </div>
 
     <div class="hub-container">
@@ -305,9 +281,7 @@
                 </select>
                 <div class="turno-txt" id="txt-gato">Turno: X</div>
             </div>
-            <div class="tablero-gato">
-                <script>for(let i=0;i<9;i++) document.write(`<div class="celda-gato" onclick="clickGato(${i})"></div>`);</script>
-            </div>
+            <div class="tablero-gato" id="tab-gato-box"></div>
             <button class="btn-accion" id="reset-gato" onclick="reiniciarGato()">Reiniciar 🔄</button>
         </div>
 
@@ -358,7 +332,7 @@
                 <button class="btn-ppt" onclick="jugarPPT('🦎')">🦎</button>
                 <button class="btn-ppt" onclick="jugarPPT('🖖')">🖖</button>
             </div>
-            <div class="marcador-carrera" style="font-size:1.2rem;">
+            <div class="marcador-carrera">
                 <div id="ppt-p1">Tú: -</div>
                 <div id="ppt-p2">IA: -</div>
             </div>
@@ -368,7 +342,7 @@
             <h2 id="t-snake">🐍 Arcade Snake Clásico</h2>
             <div class="turno-txt" id="txt-snake">Puntos: 0</div>
             <div class="contenedor-canvas-snake">
-                <canvas id="canvas-snake" width="400" height="280"></canvas>
+                <canvas id="canvas-snake" width="340" height="240"></canvas>
             </div>
             <div class="controles-snake">
                 <div></div><button class="btn-dir" onclick="cambiarDirSnake('UP')">▲</button><div></div>
@@ -426,134 +400,346 @@
     </div>
 
     <script>
-        // Lógica de cambio de pantalla de juegos
-        function cambiarEscenario(indice, boton) {
-            sonarBoton();
-            // Desactivar todos los escenarios
+        // --- MOTOR LOGICA GENERAL E INTERFAZ ---
+        function cambiarJuego(indice, boton) {
+            sonarSintetizador('clic');
             const escenarios = document.querySelectorAll('.escenario-juego');
             escenarios.forEach(esc => esc.classList.remove('activo'));
-            
-            // Activar el seleccionado
             escenarios[indice].classList.add('activo');
 
-            // Cambiar estado activo en el botón lateral
             const botones = document.querySelectorAll('.btn-menu-juego');
-            botones.forEach(btn => btn.classList.remove('activo'));
+            botones.forEach(b => b.classList.remove('activo'));
             boton.classList.add('activo');
 
-            // Inicializadores especiales al cambiar de juego
-            if (indice === 1) initC4();
+            // Disparadores automáticos al cargar vistas grandes
+            if(indice === 0) buildGatoHTML();
+            if(indice === 1) initC4();
+            if(indice === 2) reiniciarNim();
+            if(indice === 4) reiniciarMemory();
+            if(indice === 6) initSnake();
+            if(indice === 7) initAhorcado();
         }
 
-        // --- MOTOR DE TRADUCCIÓN ---
-        let langActual = 'es';
-        const locales = {
-            es: {
-                seleccionar: "🕹️ Selecciona un Juego", apps: "🚀 Más Aplicaciones", title: "🎲 Mega Consola de Juegos de Mesa 🎯",
-                tgato: "⭕ Tres en Raya (Gato)", tc4: "🔵 Conecta 4 en Línea", tnim: "🥢 Estrategia Matemática: NIM",
-                tcarrera: "🏃 Carrera de Dados (Meta: 50)", ttools: "🎛️ Generador de Azar Avanzado",
-                tmemory: "🧠 Parejas de Memoria", tppt: "✂️ Piedra, Papel, Tijera, Lagarto, Spock",
-                tsnake: "🐍 Arcade Snake Clásico", thangman: "🪵 Juego del Ahorcado", tcookie: "🍪 Clicker Incremental", tsimon: "💡 Simón Dice Retro",
-                pvp: "Dos Jugadores (PvP)", ai: "Contra IA del Sistema", tX: "Turno: Jugador X", tO: "Turno: Jugador O",
-                gX: "🎉 ¡Jugador X gana!", gO: "🎉 ¡Jugador O gana!", empate: "🤝 ¡Empate!",
-                tRojo: "Turno: Rojo 🔴", tAzul: "Turno: Azul 🔵", gRojo: "🎉 ¡Gana el color Rojo!", gAzul: "🎉 ¡Gana el color Azul!",
-                nimTxt: "Retira 1, 2 o 3 piezas. ¡No te quedes con la última!", nimGanaP1: "🎉 ¡Jugador 1 gana el duelo!", nimGanaP2: "💻 ¡La IA gana!",
-                carTxt: "¡Lanza para acumular puntos!", carGanaP1: "🎉 ¡Felicidades, ganaste!", carGanaP2: "💻 La IA llegó primero.",
-                memTxt: "¡Encuentra todas las parejas ocultas!", memWin: "🎉 ¡Memoria completada!",
-                pptTxt: "Elige tu arma secreta contra el sistema.", pptWin: "🎉 ¡Ganaste la ronda!", pptLose: "💻 ¡La IA gana la ronda!",
-                snkScore: "Puntos: ", snkOver: "💥 Fin del juego. ¡Inténtalo de nuevo!",
-                hangVidas: "Vidas restantes: ", hangWin: "🎉 ¡Ganaste! Revelaste la palabra.", hangLose: "💥 Perdiste. La palabra era: ",
-                cookTxt: "Galletas: ", cookUpgrade: "Mejorar Rodillo (Coste: ", simGo: "¡Tu turno! Repite el orden.", simErr: "💥 ¡Secuencia incorrecta! Reinicia.", simPls: "¡Pulsa Iniciar para memorizar!",
-                dado: "Lanzar Dado", moneda: "Lanzar Moneda", cara: "🪙 Cara", cruz: "🍁 Cruz", reset: "Reiniciar 🔄",
-                d6: "Dado Común (D6)", d12: "Dado de 12 Caras (D12)", d20: "Dado de Rol (D20)"
-            },
-            en: {
-                seleccionar: "🕹️ Select a Game", apps: "🚀 More Apps", title: "🎲 Mega Board Games Console 🎯",
-                tgato: "⭕ Tic-Tac-Toe Arena", tc4: "🔵 Connect 4 Slots", tnim: "🥢 Mathematical Strategy: NIM",
-                tcarrera: "🏃 Dice Race (Goal: 50)", ttools: "🎛️ Advanced RNG Toolset",
-                tmemory: "🧠 Pairs Memory Game", tppt: "✂️ Rock, Paper, Scissors, Lizard, Spock",
-                tsnake: "🐍 Classic Arcade Snake", thangman: "🪵 Hangman Game", tcookie: "🍪 Incremental Clicker", tsimon: "💡 Retro Simon Says",
-                pvp: "Two Players (PvP)", ai: "Against System AI", tX: "Turn: Player X", tO: "Turn: Player O",
-                gX: "🎉 Player X wins!", gO: "🎉 Player O wins!", empate: "🤝 Draw!",
-                tRojo: "Turn: Red 🔴", tAzul: "Turn: Blue 🔵", gRojo: "🎉 Red team wins!", gAzul: "🎉 Blue team wins!",
-                nimTxt: "Take 1, 2, or 3 pieces. Do not take the last matchstick!", nimGanaP1: "🎉 Player 1 wins!", nimGanaP2: "💻 AI wins!",
-                carTxt: "Roll to stack up score points!", carGanaP1: "🎉 Victory! You won!", carGanaP2: "💻 AI reached first.",
-                memTxt: "Find all the hidden matching pairs!", memWin: "🎉 Board cleared!",
-                pptTxt: "Choose your secret weapon.", pptWin: "🎉 You win!", pptLose: "💻 AI wins!",
-                snkScore: "Score: ", snkOver: "💥 Game over! Try again.",
-                hangVidas: "Lives left: ", hangWin: "🎉 You won! Word guessed.", hangLose: "💥 Game Over. Word was: ",
-                cookTxt: "Cookies: ", cookUpgrade: "Upgrade Roller (Cost: ", simGo: "Your turn! Match sequence.", simErr: "💥 Wrong sequence! Restart.", simPls: "Press Start to watch!",
-                dado: "Roll Dice", moneda: "Flip Coin", cara: "🪙 Heads", cruz: "🍁 Tails", reset: "Reset 🔄",
-                d6: "Standard Dice (D6)", d12: "12-Sided (D12)", d20: "RPG Dice (D20)"
-            },
-            fr: {
-                seleccionar: "🕹️ Choisir un Jeu", apps: "🚀 Plus d'Apps", title: "🎲 Méga Console de Jeux de Société 🎯",
-                tgato: "⭕ Jeu du Morpion", tc4: "🔵 Puissance 4 en Ligne", tnim: "🥢 Stratégie Mathématique : NIM",
-                tcarrera: "🏃 Course aux Dés (50)", ttools: "🎛️ Générateur de Hasard",
-                tmemory: "🧠 Cartes Mémoire", tppt: "✂️ Pierre, Feuille, Ciseaux, Lézard, Spock",
-                tsnake: "🐍 Serpent Arcade Classique", thangman: "🪵 Jeu du Pendu", tcookie: "🍪 Clicker Incrémental", tsimon: "💡 Simon Says Rétro",
-                pvp: "Deux Joueurs", ai: "Contre l'IA", tX: "Tour : Joueur X", tO: "Tour : Joueur O",
-                gX: "🎉 Joueur X gagne !", gO: "🎉 Joueur O gagne !", empate: "🤝 Match nul !",
-                tRojo: "Tour : Rouge 🔴", tAzul: "Tour : Bleu 🔵", gRojo: "🎉 Rouges gagnent !", gAzul: "🎉 Bleus gagnent !",
-                nimTxt: "Retirez 1, 2 ou 3 bâtonnets.", nimGanaP1: "🎉 Joueur 1 gagne !", nimGanaP2: "💻 L'IA a gagné !",
-                carTxt: "Lancez le dé !", carGanaP1: "🎉 Victoire !", carGanaP2: "💻 L'IA a gagné.",
-                memTxt: "Trouvez las paires !", memWin: "🎉 Félicitations !",
-                pptTxt: "Choisissez votre arme.", pptWin: "🎉 Gagné !", pptLose: "💻 IA a gagné !",
-                snkScore: "Score : ", snkOver: "💥 Fin du jeu !",
-                hangVidas: "Vies: ", hangWin: "🎉 Gagné ! Le mot était bon.", hangLose: "💥 Pendu. Le mot était: ",
-                cookTxt: "Biscuits: ", cookUpgrade: "Améliorer (Coût: ", simGo: "À toi ! Répète.", simErr: "💥 Erreur ! Recommence.", simPls: "Cliquez sur Démarrer !",
-                dado: "Lancer Dé", moneda: "Lancer Pièce", cara: "🪙 Face", cruz: "🍁 Pile", reset: "Réinitialiser 🔄",
-                d6: "Dé Standard (D6)", d12: "Dé 12 Faces (D12)", d20: "Dé de Rôle (D20)"
-            }
-        };
-
-        function cambiarIdioma() {
-            langActual = document.getElementById('select-lang').value;
-            const res = locales[langActual];
-            document.getElementById('lbl-seleccionar').innerText = res.seleccionar;
-            document.getElementById('main-title').innerText = res.title;
-            // (Resto de traducciones automáticas)
-            sonarSintetizador('clic');
-        }
-
-        // --- AUDIO NATIVO ---
+        // --- AUDIO ENGINE ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function lanzarFrecuencia(f, start, dur, type='sine', vol=0.03) {
-            let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination); osc.type = type;
-            osc.frequency.setValueAtTime(f, audioCtx.currentTime + start);
-            gain.gain.setValueAtTime(vol, audioCtx.currentTime + start);
-            osc.start(audioCtx.currentTime + start); osc.stop(audioCtx.currentTime + start + dur);
+            try {
+                let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination); osc.type = type;
+                osc.frequency.setValueAtTime(f, audioCtx.currentTime + start);
+                gain.gain.setValueAtTime(vol, audioCtx.currentTime + start);
+                osc.start(audioCtx.currentTime + start); osc.stop(audioCtx.currentTime + start + dur);
+            } catch(e){}
         }
         function sonarSintetizador(tipo) {
             if (audioCtx.state === 'suspended') audioCtx.resume();
             if (tipo === 'clic') lanzarFrecuencia(550, 0, 0.04, 'sine', 0.04);
+            if (tipo === 'flip') lanzarFrecuencia(350, 0, 0.05, 'triangle', 0.04);
+            if (tipo === 'error') lanzarFrecuencia(150, 0, 0.25, 'sawtooth', 0.03);
+            if (tipo === 'exito') { lanzarFrecuencia(523, 0, 0.07); lanzarFrecuencia(659, 0.07, 0.07); lanzarFrecuencia(783, 0.14, 0.15); }
         }
-        function sonarBoton() { sonarSintetizador('clic'); }
 
-        // --- LÓGICA REDUCIDA DE PRUEBA PARA JUEGOS ---
+        // --- 1. TRES EN RAYA ---
         let turnoGato = 'X', gatoActivo = true, tableroGato = Array(9).fill("");
+        function buildGatoHTML() {
+            const box = document.getElementById('tab-gato-box');
+            box.innerHTML = '';
+            for(let i=0; i<9; i++) {
+                let cell = document.createElement('div');
+                cell.className = 'celda-gato';
+                cell.onclick = () => clickGato(i);
+                box.appendChild(cell);
+            }
+            reiniciarGato();
+        }
         function clickGato(i) {
             if (tableroGato[i] !== "" || !gatoActivo) return;
-            sonarSintetizador('clic'); tableroGato[i] = turnoGato;
+            sonarSintetizador('clic');
+            tableroGato[i] = turnoGato;
             const celdas = document.getElementsByClassName('celda-gato');
-            celdas[i].innerText = turnoGato; celdas[i].style.color = turnoGato === 'X' ? 'var(--p1-color)' : 'var(--p2-color)';
+            celdas[i].innerText = turnoGato;
+            celdas[i].style.color = turnoGato === 'X' ? 'var(--p1-color)' : 'var(--p2-color)';
+            
+            if (checkWinGato()) {
+                document.getElementById('txt-gato').innerText = `¡Gana ${turnoGato}! 🎉`;
+                gatoActivo = false; sonarSintetizador('exito'); return;
+            }
+            if (!tableroGato.includes("")) { document.getElementById('txt-gato').innerText = "🤝 ¡Empate!"; gatoActivo = false; return; }
+            
             turnoGato = turnoGato === 'X' ? 'O' : 'X';
-            document.getElementById('txt-gato').innerText = "Turno: " + turnoGato;
+            document.getElementById('txt-gato').innerText = `Turno: ${turnoGato}`;
+            if (document.getElementById('modo-gato').value === 'AI' && turnoGato === 'O' && gatoActivo) {
+                setTimeout(() => {
+                    let libres = [];
+                    tableroGato.forEach((c, idx) => { if(c==="") libres.push(idx); });
+                    if (libres.length > 0) clickGato(libres[Math.floor(Math.random() * libres.length)]);
+                }, 300);
+            }
         }
-        function reiniciarGato() { tableroGato.fill(""); const celdas = document.getElementsByClassName('celda-gato'); for(let c of celdas) c.innerText = ""; gatoActivo = true; turnoGato = 'X'; document.getElementById('txt-gato').innerText = "Turno: X"; }
+        function checkWinGato() {
+            const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+            return wins.some(w => tableroGato[w[0]] && tableroGato[w[0]]===tableroGato[w[1]] && tableroGato[w[0]]===tableroGato[w[2]]);
+        }
+        function reiniciarGato() {
+            turnoGato = 'X'; gatoActivo = true; tableroGato.fill("");
+            const celdas = document.getElementsByClassName('celda-gato');
+            for(let c of celdas) c.innerText = "";
+            document.getElementById('txt-gato').innerText = "Turno: X";
+        }
 
-        let matrizC4 = Array(6).fill(null).map(()=>Array(7).fill(0));
+        // --- 2. CONECTA 4 ---
+        let turnoC4 = 1, c4Activo = true, matrizC4 = Array(6).fill(null).map(()=>Array(7).fill(0));
         function initC4() {
             const htmlBoard = document.getElementById('board-c4'); htmlBoard.innerHTML = '';
+            matrizC4 = Array(6).fill(null).map(()=>Array(7).fill(0));
+            turnoC4 = 1; c4Activo = true;
+            document.getElementById('txt-c4').innerText = "Turno: Rojo";
             for (let r = 0; r < 6; r++) {
                 for (let c = 0; c < 7; c++) {
                     let div = document.createElement('div'); div.className = 'ficha-c4';
-                    htmlBoard.appendChild(div);
+                    div.dataset.row = r; div.dataset.col = c;
+                    div.onclick = () => clickC4(c); htmlBoard.appendChild(div);
                 }
             }
         }
+        function clickC4(c) {
+            if (!c4Activo) return;
+            for (let r = 5; r >= 0; r--) {
+                if (matrizC4[r][c] === 0) {
+                    matrizC4[r][c] = turnoC4; sonarSintetizador('clic');
+                    let target = document.querySelector(`[data-row='${r}'][data-col='${c}']`);
+                    target.style.background = turnoC4 === 1 ? 'var(--p1-color)' : 'var(--p2-color)';
+                    if (checkWinC4(r, c)) {
+                        document.getElementById('txt-c4').innerText = `🎉 ¡Gana el jugador ${turnoC4 === 1 ? 'Rojo' : 'Azul'}!`;
+                        c4Activo = false; sonarSintetizador('exito'); return;
+                    }
+                    turnoC4 = turnoC4 === 1 ? 2 : 1;
+                    document.getElementById('txt-c4').innerText = `Turno: ${turnoC4 === 1 ? 'Rojo' : 'Azul'}`;
+                    break;
+                }
+            }
+        }
+        function checkWinC4(r, c) {
+            let val = matrizC4[r][c];
+            const check = (dr, dc) => {
+                let count = 1;
+                for(let i=1; i<4; i++) { if(matrizC4[r+dr*i]?.[c+dc*i] === val) count++; else break; }
+                for(let i=1; i<4; i++) { if(matrizC4[r-dr*i]?.[c-dc*i] === val) count++; else break; }
+                return count >= 4;
+            };
+            return check(0,1) || check(1,0) || check(1,1) || check(1,-1);
+        }
         function reiniciarC4() { initC4(); }
+
+        // --- 3. NIM ---
+        let cerillasRestantes = 15;
+        function reiniciarNim() {
+            cerillasRestantes = 15;
+            const b = document.getElementById('board-nim'); b.innerHTML = '';
+            for(let i=0; i<15; i++) { b.innerHTML += `<div class="cerilla" id="nim-${i}"></div>`; }
+            document.getElementById('txt-nim').innerText = "Retira 1, 2 o 3 piezas. ¡No te quedes con la última!";
+        }
+        function retirarNim(cant) {
+            if(cerillasRestantes <= 0) return;
+            sonarSintetizador('clic');
+            for(let i=0; i<cant; i++) {
+                if(cerillasRestantes > 0) {
+                    document.getElementById(`nim-${15 - cerillasRestantes}`).classList.add('eliminada');
+                    cerillasRestantes--;
+                }
+            }
+            if(cerillasRestantes === 0) { document.getElementById('txt-nim').innerText = "💻 ¡La IA gana! Te quedaste con la última."; sonarSintetizador('error'); return; }
+            // Turno de la IA
+            setTimeout(() => {
+                let iaTake = (cerillasRestantes - 1) % 4;
+                if(iaTake === 0) iaTake = Math.floor(Math.random() * 3) + 1;
+                iaTake = Math.min(iaTake, cerillasRestantes);
+                for(let i=0; i<iaTake; i++) {
+                    document.getElementById(`nim-${15 - cerillasRestantes}`).classList.add('eliminada');
+                    cerillasRestantes--;
+                }
+                if(cerillasRestantes === 0) { document.getElementById('txt-nim').innerText = "🎉 ¡Ganaste! Dejaste a la IA sin piezas."; sonarSintetizador('exito'); }
+            }, 400);
+        }
+
+        // --- 4. CARRERA DADOS ---
+        let p1Score = 0, p2Score = 0;
+        function jugarCarrera() {
+            sonarSintetizador('clic');
+            let d1 = Math.floor(Math.random() * 6) + 1;
+            p1Score += d1;
+            document.getElementById('dado-carrera').innerText = d1;
+            document.getElementById('score-p1').innerText = p1Score;
+            if(p1Score >= 50) { document.getElementById('txt-carrera').innerText = "🎉 ¡Ganaste la carrera!"; sonarSintetizador('exito'); return; }
+            
+            setTimeout(() => {
+                let d2 = Math.floor(Math.random() * 6) + 1;
+                p2Score += d2;
+                document.getElementById('score-p2').innerText = p2Score;
+                if(p2Score >= 50) { document.getElementById('txt-carrera').innerText = "💻 La IA ganó la carrera."; sonarSintetizador('error'); }
+            }, 400);
+        }
+
+        // --- 5. PAREJAS MEMORIA ---
+        let cartas = ['🍎','🍎','🍌','🍌','🍇','🍇','🍒','🍒','🥕','🥕','🥦','🥦','🥑','🥑','🌽','🌽'];
+        let seleccionadas = [];
+        function reiniciarMemory() {
+            const board = document.getElementById('board-memory'); board.innerHTML = '';
+            seleccionadas = [];
+            cartas.sort(() => Math.random() - 0.5);
+            cartas.forEach((emoji, i) => {
+                let card = document.createElement('div');
+                card.className = 'carta-memory';
+                card.dataset.index = i;
+                card.innerHTML = `<span>${emoji}</span>`;
+                card.onclick = () => clickMemory(card);
+                board.appendChild(card);
+            });
+        }
+        function clickMemory(card) {
+            if(seleccionadas.length >= 2 || card.classList.contains('volteada')) return;
+            sonarSintetizador('flip');
+            card.classList.add('volteada');
+            seleccionadas.push(card);
+            if(seleccionadas.length === 2) {
+                if(seleccionadas[0].innerText === seleccionadas[1].innerText) {
+                    seleccionadas.forEach(c => c.classList.add('emparejada'));
+                    seleccionadas = [];
+                } else {
+                    setTimeout(() => {
+                        seleccionadas.forEach(c => c.classList.remove('volteada'));
+                        seleccionadas = [];
+                    }, 700);
+                }
+            }
+        }
+
+        // --- 6. PPTLS ---
+        function jugarPPT(p1) {
+            sonarSintetizador('clic');
+            const opciones = ['💎','📄','✂️','🦎','🖖'];
+            let ia = opciones[Math.floor(Math.random()*5)];
+            document.getElementById('ppt-p1').innerText = "Tú: " + p1;
+            document.getElementById('ppt-p2').innerText = "IA: " + ia;
+            if(p1 === ia) { document.getElementById('txt-ppt').innerText = "🤝 ¡Empate!"; return; }
+            const reglas = {'✂️':['📄','🦎'],'📄':['💎','🖖'],'💎':['✂️','🦎'],'🦎':['🖖','📄'],'🖖':['✂️','💎']};
+            if(reglas[p1].includes(ia)) { document.getElementById('txt-ppt').innerText = "🎉 ¡Ganaste la ronda!"; sonarSintetizador('exito'); }
+            else { document.getElementById('txt-ppt').innerText = "💻 La IA gana la ronda."; sonarSintetizador('error'); }
+        }
+
+        // --- 7. SNAKE ---
+        let canvas, ctx, snake, dir, apple, score, loop;
+        function initSnake() {
+            canvas = document.getElementById('canvas-snake'); ctx = canvas.getContext('2d');
+            snake = [{x:10, y:10}]; dir = 'RIGHT'; score = 0;
+            apple = {x:5, y:5};
+            clearInterval(loop);
+            loop = setInterval(updateSnake, 130);
+        }
+        function cambiarDirSnake(d) { dir = d; }
+        function updateSnake() {
+            let head = {...snake[0]};
+            if(dir === 'UP') head.y--; if(dir === 'DOWN') head.y++;
+            if(dir === 'LEFT') head.x--; if(dir === 'RIGHT') head.x++;
+            
+            if(head.x<0 || head.x>=20 || head.y<0 || head.y>=14 || snake.some(s=>s.x===head.x && s.y===head.y)) {
+                document.getElementById('txt-snake').innerText = "💥 ¡Fin del Juego!"; sonarSintetizador('error'); clearInterval(loop); return;
+            }
+            snake.unshift(head);
+            if(head.x === apple.x && head.y === apple.y) {
+                score += 10; document.getElementById('txt-snake').innerText = "Puntos: " + score;
+                apple = {x: Math.floor(Math.random()*20), y: Math.floor(Math.random()*14)};
+                sonarSintetizador('exito');
+            } else { snake.pop(); }
+            
+            ctx.fillStyle = '#111'; ctx.fillRect(0,0,340,240);
+            ctx.fillStyle = 'red'; ctx.fillRect(apple.x*17, apple.y*17, 15, 15);
+            ctx.fillStyle = 'lime'; snake.forEach(s => ctx.fillRect(s.x*17, s.y*17, 15, 15));
+        }
+
+        // --- 8. AHORCADO ---
+        let palabras = ["TABLERO", "DADOS", "FICHAS", "CARTAS", "AJEDREZ", "CONSOLA"];
+        let secreta, descubierta, vidas;
+        function initAhorcado() {
+            secreta = palabras[Math.floor(Math.random()*palabras.length)];
+            descubierta = Array(secreta.length).fill("_");
+            vidas = 6;
+            document.getElementById('palabra-ahorcado').innerText = descubierta.join(" ");
+            document.getElementById('txt-hangman').innerText = "Vidas restantes: " + vidas;
+            const tec = document.getElementById('teclado-ahorcado'); tec.innerHTML = '';
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach(l => {
+                tec.innerHTML += `<button class="letra-btn" onclick="letraAhorcado('${l}', this)">${l}</button>`;
+            });
+        }
+        function letraAhorcado(l, btn) {
+            btn.disabled = true;
+            if(secreta.includes(l)) {
+                for(let i=0; i<secreta.length; i++) { if(secreta[i]===l) descubierta[i]=l; }
+                document.getElementById('palabra-ahorcado').innerText = descubierta.join(" ");
+                if(!descubierta.includes("_")) { document.getElementById('txt-hangman').innerText = "🎉 ¡Ganaste!"; sonarSintetizador('exito'); }
+            } else {
+                vidas--; document.getElementById('txt-hangman').innerText = "Vidas restantes: " + vidas;
+                if(vidas===0) { document.getElementById('txt-hangman').innerText = "💥 ¡Perdiste! Era: " + secreta; sonarSintetizador('error'); }
+            }
+        }
+
+        // --- 9. COOKIE CLICKER ---
+        let cookiesCount = 0, cookieMult = 1, cookieCostUpgrade = 15;
+        function clickGalleta() { cookiesCount += cookieMult; updateCookieUI(); }
+        function comprarUpgradeCookie() {
+            if(cookiesCount >= cookieCostUpgrade) {
+                cookiesCount -= cookieCostUpgrade; cookieMult++; cookieCostUpgrade = Math.floor(cookieCostUpgrade * 1.8);
+                updateCookieUI(); sonarSintetizador('exito');
+            } else { sonarSintetizador('error'); }
+        }
+        function updateCookieUI() {
+            document.getElementById('txt-cookie').innerText = `Galletas: ${cookiesCount} (Multiplicador: x${cookieMult})`;
+            document.getElementById('btn-up-cookie').innerText = `Mejorar Rodillo (Coste: ${cookieCostUpgrade}) 🛠️`;
+        }
+
+        // --- 10. SIMON SAYS ---
+        let simonSeq = [], userSeq = [], simonActive = false;
+        function initSimon() { simonSeq = []; nextSimonRound(); }
+        function nextSimonRound() {
+            userSeq = []; simonSeq.push(Math.floor(Math.random()*4));
+            playSimonSequence();
+        }
+        function playSimonSequence() {
+            simonActive = false;
+            document.getElementById('txt-simon').innerText = "✨ Memoriza...";
+            simonSeq.forEach((padId, index) => {
+                setTimeout(() => {
+                    let pad = document.getElementById('simon-'+padId);
+                    pad.classList.add('lit');
+                    setTimeout(() => pad.classList.remove('lit'), 300);
+                    if(index === simonSeq.length - 1) { setTimeout(() => { simonActive = true; document.getElementById('txt-simon').innerText = "¡Tu turno!"; }, 400); }
+                }, (index + 1) * 600);
+            });
+        }
+        function clickSimon(id) {
+            if(!simonActive) return;
+            userSeq.push(id);
+            if(userSeq[userSeq.length-1] !== simonSeq[userSeq.length-1]) {
+                document.getElementById('txt-simon').innerText = "💥 Error, ¡vuelve a empezar!"; sonarSintetizador('error');
+                simonActive = false; return;
+            }
+            if(userSeq.length === simonSeq.length) { sonarSintetizador('exito'); setTimeout(nextSimonRound, 800); }
+        }
+
+        // --- 11. AZAR ---
+        function lanzarCajaDado() {
+            let caras = document.getElementById('tipo-dado').value;
+            let result = Math.floor(Math.random() * caras) + 1;
+            document.getElementById('res-d6').innerText = result; sonarSintetizador('clic');
+        }
+        function lanzarMoneda() {
+            let res = Math.random() > 0.5 ? "🪙 Cara" : "🍁 Cruz";
+            document.getElementById('res-moneda').innerText = res; sonarSintetizador('clic');
+        }
+
+        function cambiarIdioma() { sonarSintetizador('clic'); }
+        // Forzar construcción inicial del gato en grande
+        buildGatoHTML();
     </script>
 </body>
 </html>
